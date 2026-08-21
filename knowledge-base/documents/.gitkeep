@@ -1,0 +1,3 @@
+# Knowledge Base - Raw ML Documents
+# Place ML documentation, research papers, and curated guides here.
+# These will be processed, chunked, embedded, and stored in ChromaDB.
