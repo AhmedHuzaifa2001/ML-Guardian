@@ -1,0 +1,41 @@
+# Backend Dependencies
+
+# --- Web Framework ---
+fastapi
+uvicorn[standard]
+python-multipart
+
+# --- Database ---
+sqlalchemy
+psycopg2-binary
+alembic
+
+# --- Authentication ---
+PyJWT
+bcrypt
+python-dotenv
+
+# --- LLM & AI ---
+openai
+langchain
+langchain-openai
+langchain-community
+
+# --- Embeddings & Vector DB ---
+sentence-transformers
+chromadb
+
+# --- NLP ---
+spacy
+
+# --- Security ---
+slowapi
+
+# --- Utilities ---
+pydantic
+pydantic-settings
+httpx
+
+# --- Testing ---
+pytest
+pytest-asyncio
