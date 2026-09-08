@@ -23,9 +23,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from auth.router import router as auth_router
+
+# Include the routers
+app.include_router(auth_router)
+
 @app.get("/")
 def read_root():
-    return {"message": f"Welcome to {settings.APP_NAME} API"}
+    return {"message": f"Welcome to Agentic ML API"}
 
 @app.get("/health")
 def health_check():
