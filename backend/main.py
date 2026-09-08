@@ -1,25 +1,32 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from config import settings
+from models.database import engine, Base
+from models import user  # Import models so Base.metadata.create_all knows about them
 
+# Create database tables if they don't exist yet
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Agentic AI API"
+    title="ML-Gurdian",
+    version="1.0.0",
+    description="Secure Multi-Agent AI System API"
 )
 
-
-# CORS
+# Set up CORS (Cross-Origin Resource Sharing)
+# This allows the React frontend to communicate with this backend API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173", "http://localhost:3000"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+@app.get("/")
+def read_root():
+    return {"message": f"Welcome to {settings.APP_NAME} API"}
 
-# Health check
 @app.get("/health")
-async def health_check():
-    return {
-        "status": "healthy"
-    }
+def health_check():
+    return {"status": "healthy"}

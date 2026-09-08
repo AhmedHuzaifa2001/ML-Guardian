@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-from backend.config import settings
+from config import settings
 
 # 1. Create the SQLAlchemy engine
 # This establishes the core connection to PostgreSQL database

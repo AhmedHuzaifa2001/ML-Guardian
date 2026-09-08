@@ -1,5 +1,9 @@
+import os
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+# Get the directory two levels up (ml_gurdian) where the .env file is
+base_dir = Path(__file__).resolve().parent.parent
 
 class Settings(BaseSettings):
     DATABASE_URL: str
@@ -11,10 +15,10 @@ class Settings(BaseSettings):
     GROQ_API_KEY: str
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(base_dir / ".env"),
         env_file_encoding="utf-8",
         case_sensitive=True,
+        extra="ignore"
     )
-
 
 settings = Settings()
