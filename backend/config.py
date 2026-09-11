@@ -14,6 +14,11 @@ class Settings(BaseSettings):
 
     GROQ_API_KEY: str
 
+    # ChromaDB Settings
+    CHROMA_PERSIST_DIRECTORY: str = "./chroma_data"
+    CHROMA_COLLECTION_NAME: str = "ml_knowledge_base"
+    EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
+
     model_config = SettingsConfigDict(
         env_file=str(base_dir / ".env"),
         env_file_encoding="utf-8",
