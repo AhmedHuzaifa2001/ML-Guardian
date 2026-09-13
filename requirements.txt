@@ -20,6 +20,7 @@ openai
 langchain
 langchain-openai
 langchain-community
+langchain_groq
 
 # --- Embeddings & Vector DB ---
 sentence-transformers
@@ -35,6 +36,9 @@ slowapi
 pydantic
 pydantic-settings
 httpx
+logfire
+logfire[system-metrics]
+logfire[langchain]
 
 # --- Testing ---
 pytest

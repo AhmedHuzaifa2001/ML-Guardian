@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     GROQ_API_KEY: str
+    GROQ_MODEL: str = "openai/gpt-oss-120b"
+    LLM_TEMPERATURE: float = 0.3
+    LLM_MAX_TOKENS: int = 2048
 
     # ChromaDB Settings
     CHROMA_PERSIST_DIRECTORY: str = "./chroma_data"
