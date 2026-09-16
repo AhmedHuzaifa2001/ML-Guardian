@@ -58,14 +58,26 @@ def route_query(user_query: str) -> dict:
     chain = prompt | llm | parser
     
     import logfire
+    from langchain_core.exceptions import OutputParserException
     
     # Run the chain inside a Logfire span to track it visually
     with logfire.span("Orchestrator Agent: Analyzing Intent for query '{query}'", query=user_query):
-        decision = chain.invoke({
-            "query": user_query,
-            "format_instructions": parser.get_format_instructions()
-        })
-        logfire.info("Orchestrator routed successfully: {intent}", intent=decision.get("intent"))
+        try:
+            decision = chain.invoke({
+                "query": user_query,
+                "format_instructions": parser.get_format_instructions()
+            })
+            logfire.info("Orchestrator routed successfully: {intent}", intent=decision.get("intent"))
+        except OutputParserException:
+            # LLM refused to process (e.g., violent/harmful content)
+            # Return a safe default that routes to GENERAL_CHAT
+            logfire.warn("LLM refused to classify intent — likely harmful content. Defaulting to GENERAL_CHAT.")
+            decision = {
+                "intent": "GENERAL_CHAT",
+                "needs_retrieval": False,
+                "needs_ml_analysis": False,
+                "extracted_context": "The LLM flagged this query as potentially harmful."
+            }
     
     return decision
 

@@ -1,0 +1,45 @@
+Machine Learning - Evaluation Metrics
+
+Evaluating a machine learning model is crucial to understand its performance and limitations. The choice of metric depends heavily on whether the task is regression or classification, and the balance of the dataset.
+
+CLASSIFICATION METRICS:
+
+1. Confusion Matrix
+Not a metric itself, but a table that describes the performance of a classification model. It contains:
+- True Positives (TP): Correctly predicted positive.
+- True Negatives (TN): Correctly predicted negative.
+- False Positives (FP): Incorrectly predicted positive (Type I Error).
+- False Negatives (FN): Incorrectly predicted negative (Type II Error).
+
+2. Accuracy
+The ratio of correctly predicted observation to the total observations. 
+Formula: (TP+TN) / (TP+FP+FN+TN)
+Warning: Accuracy is highly misleading if the dataset is imbalanced (e.g., if 99% of transactions are non-fraudulent, a model that always predicts "non-fraud" is 99% accurate but completely useless).
+
+3. Precision
+Of all the positive predictions, how many were actually positive? Focuses on minimizing False Positives.
+Formula: TP / (TP + FP)
+
+4. Recall (Sensitivity)
+Of all the actual positives, how many did we predict correctly? Focuses on minimizing False Negatives. Crucial for medical diagnosis or fraud detection.
+Formula: TP / (TP + FN)
+
+5. F1-Score
+The harmonic mean of Precision and Recall. It is the best metric to use when you have an uneven class distribution and want to seek a balance between Precision and Recall.
+
+6. ROC-AUC (Receiver Operating Characteristic - Area Under Curve)
+The ROC curve plots the True Positive Rate against the False Positive Rate at various threshold settings. AUC represents the degree or measure of separability. An AUC of 1.0 means perfect classification, while 0.5 means the model is randomly guessing.
+
+REGRESSION METRICS:
+
+1. Mean Absolute Error (MAE)
+The average of the absolute differences between predictions and actual values. It gives an idea of how wrong the predictions were. It is robust to outliers.
+
+2. Mean Squared Error (MSE)
+The average of the squared differences between predictions and actual values. Because it squares the errors, it punishes larger errors more severely than smaller ones.
+
+3. Root Mean Squared Error (RMSE)
+The square root of MSE. It is highly interpretable because it is in the same units as the target variable.
+
+4. R-Squared (Coefficient of Determination)
+Represents the proportion of the variance for a dependent variable that's explained by an independent variable or variables in a regression model. A score of 1.0 is perfect, 0.0 means the model acts as a horizontal mean line.

@@ -1,0 +1,28 @@
+Machine Learning - Deep Learning Fundamentals
+
+Deep learning is a subset of machine learning based on artificial neural networks with multiple layers (hence "deep").
+
+1. Artificial Neural Networks (ANN)
+The foundation of deep learning. Inspired by the human brain, ANNs consist of an input layer, one or more hidden layers, and an output layer. Each layer contains "neurons" that perform mathematical operations. Data passes forward through the network (Forward Propagation).
+
+2. Activation Functions
+These introduce non-linearity into the network, allowing it to learn complex patterns. Without them, an ANN is essentially just a linear regression model.
+- ReLU (Rectified Linear Unit): Outputs the input directly if positive, otherwise outputs zero. Most common for hidden layers.
+- Sigmoid: Outputs a value between 0 and 1. Used for binary classification output layers.
+- Softmax: Used in the output layer for multi-class classification. It outputs probabilities that sum to 1.
+
+3. Backpropagation and Gradient Descent
+- Backpropagation is how neural networks learn. It calculates the error (Loss) at the output and propagates it backward through the network to update the weights of each neuron.
+- Gradient Descent is the optimization algorithm used to minimize the Loss function by adjusting the weights iteratively. 
+
+4. Convolutional Neural Networks (CNN)
+CNNs are specialized neural networks primarily used for computer vision and image processing.
+- Convolutional Layers: Use filters (kernels) to scan images and detect features like edges, textures, or specific shapes.
+- Pooling Layers: Downsample the image to reduce computation and make the network translation-invariant (recognizing a cat whether it is on the left or right of the image).
+
+5. Recurrent Neural Networks (RNN)
+RNNs are designed to recognize patterns in sequences of data, such as text, genomes, handwriting, or the spoken word. Unlike traditional networks, RNNs have loops that allow information to persist (a form of "memory").
+- LSTM (Long Short-Term Memory): A special, more advanced type of RNN that can learn long-term dependencies, solving the "vanishing gradient" problem common in standard RNNs.
+
+6. Transformers
+The state-of-the-art architecture for Natural Language Processing (NLP), replacing RNNs. Transformers rely entirely on an "Attention Mechanism" that weighs the importance of different words in a sentence, regardless of their position. GPT (Generative Pre-trained Transformer) and BERT are famous examples.

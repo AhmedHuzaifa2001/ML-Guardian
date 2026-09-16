@@ -1,0 +1,21 @@
+Machine Learning - Supervised Learning Algorithms
+
+Supervised learning is a type of machine learning where the algorithm is trained on labeled data. This means the input data is paired with the correct output. The goal is for the model to learn the mapping from inputs to outputs so it can predict outputs for unseen data.
+
+1. Linear Regression
+Linear regression is used for predicting a continuous numerical value. It assumes a linear relationship between the input features (X) and the target variable (Y). The model tries to find the best-fitting straight line (the regression line) that minimizes the sum of squared errors between the predicted and actual values.
+
+2. Logistic Regression
+Despite its name, logistic regression is used for classification tasks (usually binary classification, e.g., spam vs. not spam). Instead of fitting a straight line, it fits an "S" shaped logistic function (Sigmoid function) that maps predictions to probabilities between 0 and 1. If the probability is > 0.5, it predicts class 1; otherwise, class 0.
+
+3. Decision Trees
+A decision tree breaks down a dataset into smaller and smaller subsets while at the same time an associated decision tree is incrementally developed. The final result is a tree with decision nodes and leaf nodes. They are intuitive and easy to visualize but are highly prone to overfitting the training data.
+
+4. Random Forest
+Random Forest is an ensemble learning method. It operates by constructing a multitude of decision trees at training time. For classification, the output is the class selected by most trees. For regression, it is the mean prediction of the individual trees. By averaging multiple trees, Random Forests correct for the habit of decision trees to overfit to their training set.
+
+5. Support Vector Machines (SVM)
+SVM is a powerful classifier that works by finding a hyperplane in an N-dimensional space that distinctly classifies the data points. The objective is to find the plane that has the maximum margin (distance) between data points of both classes. It uses a technique called the "kernel trick" to transform data into higher dimensions to separate non-linear data.
+
+6. Gradient Boosting (XGBoost, LightGBM)
+Gradient boosting is another ensemble technique where models (usually decision trees) are trained sequentially. Each new tree focuses on correcting the errors (residuals) made by the previous trees. XGBoost and LightGBM are highly optimized versions of this algorithm and are widely considered the state-of-the-art for tabular data.

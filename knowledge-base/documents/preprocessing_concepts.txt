@@ -1,0 +1,31 @@
+Machine Learning - Data Preprocessing and Concepts
+
+Data preprocessing is a critical step in machine learning. Raw data is often incomplete, inconsistent, and lacking in certain behaviors or trends. Preprocessing transforms raw data into a format that machine learning algorithms can understand.
+
+1. Handling Missing Data
+- Imputation: Filling missing values with statistical measures like Mean, Median, or Mode.
+- Dropping: Removing rows or columns with too many missing values.
+- Advanced Imputation: Using algorithms like K-Nearest Neighbors (KNN Imputer) to predict and fill missing values.
+
+2. Feature Scaling
+Algorithms that calculate distance (like KNN or SVM) are highly sensitive to the scale of the data. 
+- Normalization (Min-Max Scaling): Scales all values to be between 0 and 1.
+- Standardization (Z-score scaling): Centers the data around a mean of 0 with a standard deviation of 1. Better when the data contains outliers.
+
+3. Categorical Encoding
+Machine learning algorithms only understand numbers, so text labels must be converted.
+- Label Encoding: Assigns a unique integer to each category (e.g., Apple=1, Banana=2). Can falsely imply order/hierarchy.
+- One-Hot Encoding: Creates a new binary column for each category. Best for nominal data without hierarchy.
+
+4. Bias-Variance Tradeoff
+This is the central problem in supervised machine learning.
+- Bias: The error introduced by approximating a real-world problem with a simplified model. High bias leads to Underfitting.
+- Variance: The error introduced by a model being too sensitive to small fluctuations in the training set. High variance leads to Overfitting.
+- The Goal: Find the sweet spot between a model that is too simple (underfits) and one that is too complex (overfits).
+
+5. Overfitting vs Underfitting
+- Overfitting occurs when a model learns the detail and noise in the training data to the extent that it negatively impacts the performance of the model on new data. Solutions: Get more data, use simpler models, apply regularization (L1/L2), use dropout in neural networks.
+- Underfitting occurs when a model can neither model the training data nor generalize to new data. Solutions: Add more features, use a more complex model, reduce regularization.
+
+6. Cross-Validation
+A resampling procedure used to evaluate ML models on a limited data sample. K-Fold Cross-Validation involves dividing the dataset into 'K' subsets. The model is trained on K-1 subsets and tested on the remaining subset. This is repeated K times so every subset is used as a test set exactly once. It provides a less biased estimate of model performance than a simple train/test split.

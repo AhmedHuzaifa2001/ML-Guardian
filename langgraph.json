@@ -1,0 +1,7 @@
+{
+  "dependencies": ["./requirements.txt"],
+  "graphs": {
+    "ml_guardian": "./backend/agents/workflow.py:ml_guardian_workflow"
+  },
+  "env": ".env"
+}

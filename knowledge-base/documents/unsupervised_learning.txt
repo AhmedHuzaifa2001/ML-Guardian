@@ -1,0 +1,23 @@
+Machine Learning - Unsupervised Learning Algorithms
+
+Unsupervised learning involves training a machine using data that is neither classified nor labeled. The algorithm must act on that information without guidance to discover hidden patterns and groupings in the data.
+
+1. K-Means Clustering
+K-Means is an iterative algorithm that tries to partition a dataset into K distinct, non-overlapping subgroups (clusters) where each data point belongs to only one group. It tries to make the intra-cluster data points as similar as possible while keeping the clusters as different as possible. It assigns data points to a cluster such that the sum of the squared distance between the data points and the cluster's centroid is at a minimum.
+
+2. Hierarchical Clustering
+Unlike K-Means, hierarchical clustering doesn't require pre-specifying the number of clusters. It builds a hierarchy of clusters, usually represented by a tree-like diagram called a dendrogram. 
+- Agglomerative (bottom-up): Each data point starts in its own cluster, and pairs of clusters are merged as one moves up the hierarchy.
+- Divisive (top-down): All data starts in one cluster, and splits are performed recursively down the hierarchy.
+
+3. DBSCAN (Density-Based Spatial Clustering of Applications with Noise)
+DBSCAN groups together points that are closely packed together (points with many nearby neighbors), marking points that lie alone in low-density regions as outliers or noise. It is excellent for data which contains clusters of similar density, and it does not require the user to specify the number of clusters beforehand.
+
+4. Principal Component Analysis (PCA)
+PCA is a dimensionality reduction technique. It transforms a large set of variables into a smaller one that still contains most of the information in the large set. It does this by creating new, uncorrelated variables called Principal Components, which successively maximize variance. This is widely used for data visualization and speeding up machine learning algorithms.
+
+5. t-SNE (t-Distributed Stochastic Neighbor Embedding)
+While PCA is a linear technique, t-SNE is a non-linear technique specifically designed for dimensionality reduction to 2 or 3 dimensions for visualization. It is extremely effective at creating "maps" of high-dimensional data, revealing clusters of similar data points that PCA might miss.
+
+6. Apriori Algorithm (Association Rules)
+This is used for finding frequent itemsets in a dataset for boolean association rule learning. It is widely used in market basket analysis to discover relationships like: "If a customer buys bread and butter, they are 80% likely to also buy milk."

@@ -47,3 +47,6 @@ logs/
 .coverage
 htmlcov/
 .pytest_cache/
+
+# langgraph
+.langgraph_api/

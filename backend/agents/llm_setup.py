@@ -4,7 +4,6 @@ import logfire
 
 # Initialize Logfire
 logfire.configure()
-logfire.instrument_openai()
 
 def get_llm():
     """

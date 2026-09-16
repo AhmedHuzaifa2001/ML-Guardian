@@ -21,6 +21,9 @@ langchain
 langchain-openai
 langchain-community
 langchain_groq
+langgraph
+langgraph-cli
+langgraph-cli[inmem]
 
 # --- Embeddings & Vector DB ---
 sentence-transformers
