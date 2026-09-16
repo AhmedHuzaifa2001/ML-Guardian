@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     GROQ_API_KEY: str
-    GROQ_MODEL: str = "openai/gpt-oss-120b"
+    GROQ_MODEL: str = "llama-3.1-70b-versatile"
     LLM_TEMPERATURE: float = 0.3
     LLM_MAX_TOKENS: int = 2048
 
@@ -21,6 +21,14 @@ class Settings(BaseSettings):
     CHROMA_PERSIST_DIRECTORY: str = "./chroma_data"
     CHROMA_COLLECTION_NAME: str = "ml_knowledge_base"
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
+
+    # Security Settings
+    MAX_INPUT_LENGTH: int = 5000
+    RATE_LIMIT_REQUESTS: int = 30
+    RATE_LIMIT_WINDOW_SECONDS: int = 60
+
+    # App Settings
+    APP_NAME: str = "ML-Guardian"
 
     model_config = SettingsConfigDict(
         env_file=str(base_dir / ".env"),

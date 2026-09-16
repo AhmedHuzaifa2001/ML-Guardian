@@ -31,6 +31,7 @@ spacy
 
 # --- Security ---
 slowapi
+llm-guard
 
 # --- Utilities ---
 pydantic
