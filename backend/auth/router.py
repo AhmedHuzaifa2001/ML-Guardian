@@ -51,20 +51,24 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     return {"message": "User registered successfully", "user_id": new_user.id}
 
 
+from fastapi.security import OAuth2PasswordRequestForm
+
 @router.post("/login", response_model=Token)
-def login_user(user: UserLogin, db: Session = Depends(get_db)):
-    # Find user by email
-    db_user = db.query(User).filter(User.email == user.email).first()
+def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    # Find user by email or username (Swagger uses the 'username' field for whatever the user types)
+    db_user = db.query(User).filter(
+        (User.email == form_data.username) | (User.username == form_data.username)
+    ).first()
     
     # Check if user exists and password matches
-    if not db_user or not verify_password(user.password, db_user.hashed_password):
+    if not db_user or not verify_password(form_data.password, db_user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
+            detail="Incorrect username/email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # Generate JWT token
-    access_token = create_access_token(data={"sub": str(db_user.id), "role": db_user.role})
+    # Generate JWT token with the username as the subject (required by dependencies.py)
+    access_token = create_access_token(data={"sub": db_user.username, "role": db_user.role})
 
     return {"access_token": access_token, "token_type": "bearer"}
