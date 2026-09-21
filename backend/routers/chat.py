@@ -46,9 +46,23 @@ def send_chat_message(
     Requires JWT Authentication and is Rate Limited.
     """
     
-    # 1. Send the message through the LangGraph Agentic Pipeline
-    # (This automatically handles prompt injection, PII masking, routing, RAG, and AI generation)
-    raw_workflow_result = run_workflow(chat_request.message)
+    # 1. Fetch the user's last 3 messages from PostgreSQL to provide context/memory
+    history_records = db.query(ChatSession)\
+                        .filter(ChatSession.user_id == current_user.id)\
+                        .order_by(ChatSession.created_at.desc())\
+                        .limit(3)\
+                        .all()
+    
+    # Reverse it so the oldest is first, newest is last
+    history_records = history_records[::-1]
+    
+    # Build a simple text block of the history
+    history_text = ""
+    for h in history_records:
+        history_text += f"User: {h.user_query}\nAI: {h.intent} executed.\n"
+        
+    # 2. Send the message through the LangGraph Agentic Pipeline WITH the history
+    raw_workflow_result = run_workflow(chat_request.message, history_text)
     
     # Check if the security layer blocked it completely
     if raw_workflow_result.get("status") == "blocked":

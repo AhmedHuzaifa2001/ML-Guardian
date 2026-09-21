@@ -29,76 +29,41 @@ from nlp.pii_detector import pii_detector
 class AgentState(TypedDict):
     """
     The shared state that flows through the entire LangGraph pipeline.
-    Each node reads from and writes to this state.
     """
-    # Input
     user_query: str
     sanitized_query: str
+    chat_history: str  # Added memory
     
-    # Orchestrator output
     intent: str
     needs_retrieval: bool
     needs_ml_analysis: bool
     extracted_context: str
     
-    # Agent outputs
     ml_recommendation: Optional[dict]
     risk_audit: Optional[dict]
     explanation: Optional[dict]
     
-    # Final combined response
     final_response: Optional[dict]
-    
-    # Error handling
     error: Optional[str]
 
-
-# ─────────────────────────────────────────────
-# 2. DEFINE THE NODES (Each node is a function)
-# ─────────────────────────────────────────────
-
 def security_node(state: AgentState) -> dict:
-    """
-    Node 1: Security & Input Layer
-    Sanitizes input, checks for prompt injection, and masks PII.
-    """
     with logfire.span("Node: Security & Input Layer"):
         try:
-            # Step 1: Sanitize input (length, encoding, XSS)
             sanitized = input_sanitizer.sanitize(state["user_query"])
-            logfire.info("Input sanitization passed.")
-            
-            # Step 2: Check for prompt injection attacks
             prompt_guard.check_prompt(sanitized)
-            logfire.info("Prompt injection check passed.")
-            
-            # Step 3: Mask any PII in the input
             anonymized = pii_detector.sanitize_input(sanitized)
-            logfire.info("PII check complete.")
-            
             return {"sanitized_query": anonymized, "error": None}
-            
         except (SecurityException, SanitizationException) as e:
-            logfire.warn(f"Security layer blocked request: {e}")
             return {
                 "sanitized_query": "",
                 "error": str(e),
-                "final_response": {
-                    "status": "blocked",
-                    "message": str(e)
-                }
+                "final_response": {"status": "blocked", "message": str(e)}
             }
 
-
 def orchestrator_node(state: AgentState) -> dict:
-    """
-    Node 2: Orchestrator Agent
-    Classifies user intent and decides which agents to activate.
-    """
     with logfire.span("Node: Orchestrator Agent"):
-        decision = route_query(state["sanitized_query"])
-        logfire.info(f"Intent classified: {decision.get('intent')}")
-        
+        # Pass chat history so it knows the context
+        decision = route_query(state["sanitized_query"], chat_history=state.get("chat_history", ""))
         return {
             "intent": decision.get("intent", "GENERAL_CHAT"),
             "needs_retrieval": decision.get("needs_retrieval", False),
@@ -106,49 +71,31 @@ def orchestrator_node(state: AgentState) -> dict:
             "extracted_context": decision.get("extracted_context", state["sanitized_query"])
         }
 
-
 def ml_analyst_node(state: AgentState) -> dict:
-    """
-    Node 3a: ML Analysis Agent
-    Recommends ML models based on user's problem.
-    """
     with logfire.span("Node: ML Analysis Agent"):
         recommendation = analyze_ml_problem(state["extracted_context"])
-        logfire.info(f"ML models recommended: {recommendation.get('recommended_models')}")
         return {"ml_recommendation": recommendation}
 
-
 def responsible_ai_node(state: AgentState) -> dict:
-    """
-    Node 4: Responsible AI Agent
-    Audits the ML plan for bias and privacy risks.
-    """
     with logfire.span("Node: Responsible AI Agent"):
-        # Use ML recommendation if available, otherwise audit the raw context
         ml_rec = state.get("ml_recommendation", {"note": "No ML recommendation was generated."})
         audit = audit_ml_plan(state["extracted_context"], ml_rec)
-        logfire.info(f"Risk level: {audit.get('risk_level')}")
         return {"risk_audit": audit}
 
-
 def explanation_node(state: AgentState) -> dict:
-    """
-    Node 3b: Explanation Agent (RAG)
-    Searches the knowledge base and explains ML concepts.
-    """
     with logfire.span("Node: Explanation Agent (RAG)"):
         explanation = explain_concept(state["sanitized_query"])
-        logfire.info("Explanation generated from knowledge base.")
         return {"explanation": explanation}
-
 
 def general_chat_node(state: AgentState) -> dict:
     """
     Node 3c: General Chat
-    Handles greetings and non-ML questions directly.
+    Handles greetings and follow-up questions with full memory!
     """
     with logfire.span("Node: General Chat"):
-        response = llm.invoke(state["sanitized_query"])
+        # We give the LLM the chat history + the new query
+        prompt = f"Previous Conversation:\n{state.get('chat_history', '')}\n\nUser: {state['sanitized_query']}"
+        response = llm.invoke(prompt)
         return {
             "final_response": {
                 "status": "success",
@@ -157,33 +104,13 @@ def general_chat_node(state: AgentState) -> dict:
             }
         }
 
-
 def generate_response_node(state: AgentState) -> dict:
-    """
-    Final Node: Combines all agent outputs into a single ML Risk Passport response.
-    """
     with logfire.span("Node: Generate Final Response"):
         intent = state.get("intent", "GENERAL_CHAT")
-        
-        response = {
-            "status": "success",
-            "intent": intent,
-            "query": state["user_query"],
-        }
-        
-        # Add ML recommendation if it was generated
-        if state.get("ml_recommendation"):
-            response["ml_recommendation"] = state["ml_recommendation"]
-        
-        # Add risk audit if it was generated
-        if state.get("risk_audit"):
-            response["risk_audit"] = state["risk_audit"]
-        
-        # Add explanation if it was generated
-        if state.get("explanation"):
-            response["explanation"] = state["explanation"]
-        
-        logfire.info(f"Final response assembled for intent: {intent}")
+        response = {"status": "success", "intent": intent, "query": state["user_query"]}
+        if state.get("ml_recommendation"): response["ml_recommendation"] = state["ml_recommendation"]
+        if state.get("risk_audit"): response["risk_audit"] = state["risk_audit"]
+        if state.get("explanation"): response["explanation"] = state["explanation"]
         return {"final_response": response}
 
 
@@ -294,7 +221,7 @@ def build_workflow():
 ml_guardian_workflow = build_workflow()
 
 
-def run_workflow(user_query: str) -> dict:
+def run_workflow(user_query: str, chat_history: str = "") -> dict:
     """
     Public API: Takes a user query and runs it through the entire agentic pipeline.
     Returns the final response dictionary.
@@ -302,10 +229,11 @@ def run_workflow(user_query: str) -> dict:
     with logfire.span("ML-Guardian Full Pipeline", query=user_query):
         logfire.info(f"Starting pipeline for: {user_query}")
         
-        # Initialize the state with the user's query
+        # Initialize the state with the user's query AND their chat history
         initial_state = {
             "user_query": user_query,
             "sanitized_query": "",
+            "chat_history": chat_history,
             "intent": "",
             "needs_retrieval": False,
             "needs_ml_analysis": False,

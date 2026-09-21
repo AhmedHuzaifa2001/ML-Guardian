@@ -26,9 +26,10 @@ class OrchestratorDecision(BaseModel):
         description="A brief summary of what the user is trying to achieve."
     )
 
-def route_query(user_query: str) -> dict:
+def route_query(user_query: str, **kwargs) -> dict:
     """
     Analyzes the user's query and decides which agents need to be activated.
+    Accepts kwargs like 'chat_history' for context.
     Returns a structured JSON decision.
     """
     
@@ -43,7 +44,10 @@ def route_query(user_query: str) -> dict:
     - MODEL_RECOMMENDATION (User wants advice on what ML model/algorithm to use)
     - ML_CONCEPT_EXPLANATION (User is asking how an ML concept works)
     - RISK_ANALYSIS (User is asking about bias, fairness, or privacy in ML)
-    - GENERAL_CHAT (Greetings, casual talk, unrelated to ML)
+    - GENERAL_CHAT (Greetings, casual talk, unrelated to ML, or follow-up questions asking about previous chat history)
+    
+    Previous Conversation History (for context on follow-up questions):
+    {chat_history}
     
     Format Instructions:
     {format_instructions}
@@ -63,8 +67,10 @@ def route_query(user_query: str) -> dict:
     # Run the chain inside a Logfire span to track it visually
     with logfire.span("Orchestrator Agent: Analyzing Intent for query '{query}'", query=user_query):
         try:
+            # We get chat_history from kwargs, or empty string if not provided
             decision = chain.invoke({
                 "query": user_query,
+                "chat_history": kwargs.get("chat_history", ""),
                 "format_instructions": parser.get_format_instructions()
             })
             logfire.info("Orchestrator routed successfully: {intent}", intent=decision.get("intent"))
