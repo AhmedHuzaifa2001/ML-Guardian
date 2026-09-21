@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     LLM_TEMPERATURE: float = 0.3
     LLM_MAX_TOKENS: int = 2048
 
+    TAVILY_API_KEY: str = ""  # For live web search
+
     # ChromaDB Settings
     CHROMA_PERSIST_DIRECTORY: str = "./chroma_data"
     CHROMA_COLLECTION_NAME: str = "ml_knowledge_base"

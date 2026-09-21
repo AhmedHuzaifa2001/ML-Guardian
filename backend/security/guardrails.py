@@ -23,11 +23,12 @@ class GuardrailsManager:
     def scan_for_injection(self, prompt: str) -> tuple[bool, float]:
         """
         Scans a prompt for injection attacks.
-        Returns (is_safe, risk_score).
+        Returns (is_safe, risk_score). We will default risk_score to 0.0 since it was removed.
         """
         with logfire.span("LLM-Guard: Scanning for Prompt Injection"):
-            sanitized_prompt, is_safe, risk_score = self.injection_scanner.scan(prompt)
-            return is_safe, risk_score
+            sanitized_prompt, is_safe = self.injection_scanner.scan(prompt)
+            # LLM-Guard removed risk_score in the newer versions, so we default it to 0.0
+            return is_safe, 0.0
 
     def scan_and_anonymize_pii(self, prompt: str) -> tuple[str, bool]:
         """
@@ -35,7 +36,7 @@ class GuardrailsManager:
         Returns (anonymized_prompt, is_safe).
         """
         with logfire.span("LLM-Guard: Scanning for PII"):
-            anonymized_prompt, is_safe, risk_score = self.pii_scanner.scan(prompt)
+            anonymized_prompt, is_safe = self.pii_scanner.scan(prompt)
             return anonymized_prompt, is_safe
 
 # Create a single global instance so the models are only loaded into memory once
