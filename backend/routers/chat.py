@@ -104,3 +104,16 @@ def get_chat_history(
                 .all()
     
     return {"history": history}
+
+@router.delete("/history")
+def clear_chat_history(
+    current_user: User = Depends(get_current_user), 
+    db: Session = Depends(get_db)
+):
+    """
+    Deletes all chat history for the logged-in user.
+    """
+    db.query(ChatSession).filter(ChatSession.user_id == current_user.id).delete()
+    db.commit()
+    
+    return {"status": "success", "message": "History cleared"}

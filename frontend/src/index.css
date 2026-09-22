@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+body {
+  background-color: #f8fafc;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Water Bubble Animations */
+.water-bubble {
+  /* Morphing the border-radius makes it look like liquid/water */
+  animation: morph 8s ease-in-out infinite, float 12s ease-in-out infinite alternate;
+}
+
+@keyframes morph {
+  0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+}
+
+@keyframes float {
+  0% { transform: translate(0px, 0px) rotate(0deg); }
+  33% { transform: translate(150px, -200px) rotate(120deg); }
+  66% { transform: translate(-150px, 200px) rotate(240deg); }
+  100% { transform: translate(0px, 0px) rotate(360deg); }
+}
+
+/* Delay and Duration Utilities for Randomness */
+.delay-1 { animation-delay: 0s, 0s; }
+.delay-2 { animation-delay: -2s, -4s; animation-duration: 9s, 15s; }
+.delay-3 { animation-delay: -5s, -2s; animation-duration: 7s, 11s; }
+.delay-4 { animation-delay: -7s, -8s; animation-duration: 10s, 14s; }
