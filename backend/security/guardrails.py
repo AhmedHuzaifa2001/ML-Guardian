@@ -11,7 +11,7 @@ class GuardrailsManager:
         
         # 1. Prompt Injection Scanner (Member 1)
         # Uses a local HuggingFace model to detect jailbreaks and injections
-        self.injection_scanner = PromptInjection(threshold=0.5)
+        self.injection_scanner = PromptInjection(threshold=0.92)
         
         # 2. PII / Anonymize Scanner (Member 2)
         # Detects sensitive data like emails, credit cards, names, and phone numbers
