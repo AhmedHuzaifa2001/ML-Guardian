@@ -38,7 +38,12 @@ class MLRiskPassportGenerator:
                 "models": ml_data.get("recommended_models", []),
                 "reasoning": ml_data.get("reasoning", ""),
                 "preprocessing": ml_data.get("preprocessing_steps", []),
-                "challenges": ml_data.get("potential_challenges", "")
+                "challenges": ml_data.get("potential_challenges", ""),
+                "green_ai": {
+                    "rating": ml_data.get("green_ai_rating", "Grade A (High Efficiency / CPU-Friendly)"),
+                    "hardware": ml_data.get("estimated_hardware", "Standard CPU / 8-16 GB RAM"),
+                    "carbon_summary": ml_data.get("carbon_summary", "Optimized for low carbon footprint and standard compute.")
+                }
             }
             
             # Attach Risk Audit if it exists

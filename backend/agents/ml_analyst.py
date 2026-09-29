@@ -17,6 +17,9 @@ class MLRecommendation(BaseModel):
     reasoning: str = Field(description="Why these models are a good fit for the dataset")
     preprocessing_steps: list[str] = Field(description="Important preprocessing steps (e.g., scaling, encoding)")
     potential_challenges: str = Field(description="Any pitfalls the user should watch out for (e.g., overfitting, imbalanced classes)")
+    green_ai_rating: str = Field(description="Green AI energy efficiency grade: 'Grade A (High Efficiency / CPU-Friendly)', 'Grade B (Moderate / Single GPU)', 'Grade C (Heavy Compute / High VRAM)', or 'Grade D (Extensive Cluster / High Carbon Footprint)'")
+    estimated_hardware: str = Field(description="Estimated minimal hardware needed, e.g., 'Commodity CPU / 8-16 GB RAM' or 'Single GPU (e.g., T4/V100 16GB)'")
+    carbon_summary: str = Field(description="1-sentence comment on the energy, compute, and carbon footprint impact")
 
 def analyze_ml_problem(context: str) -> dict:
     """

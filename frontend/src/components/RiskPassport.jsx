@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   ShieldAlert, ShieldCheck, Cpu, AlertTriangle, 
-  BookOpen, Link as LinkIcon, CheckCircle2, Info 
+  BookOpen, Link as LinkIcon, CheckCircle2, Info, Leaf
 } from 'lucide-react';
 import TypewriterText from './TypewriterText';
 
@@ -85,6 +85,30 @@ export default function RiskPassport({ data }) {
                 </div>
               )}
             </div>
+
+            {/* Green AI & Compute Footprint */}
+            {content.recommendations.green_ai && (
+              <div className="mt-4 bg-emerald-50/70 border border-emerald-200/80 rounded-xl p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                  <h5 className="text-xs font-bold text-emerald-800 uppercase flex items-center gap-1.5">
+                    <Leaf className="w-4 h-4 text-emerald-600" /> Green AI & Compute Footprint
+                  </h5>
+                  <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                    {content.recommendations.green_ai.rating}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-700 mt-2">
+                  <div className="bg-white/80 p-2.5 rounded-lg border border-emerald-100 shadow-2xs">
+                    <span className="font-semibold text-emerald-900 block mb-0.5">Estimated Hardware:</span>
+                    <span className="text-gray-600">{content.recommendations.green_ai.hardware}</span>
+                  </div>
+                  <div className="bg-white/80 p-2.5 rounded-lg border border-emerald-100 shadow-2xs">
+                    <span className="font-semibold text-emerald-900 block mb-0.5">Carbon & Energy Impact:</span>
+                    <span className="text-gray-600">{content.recommendations.green_ai.carbon_summary}</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </section>
         )}
 
