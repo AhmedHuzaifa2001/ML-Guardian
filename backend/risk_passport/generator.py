@@ -27,6 +27,7 @@ class MLRiskPassportGenerator:
             "generated_for": user_name,
             "timestamp": datetime.now().isoformat(),
             "query_intent": intent,
+            "sanitized_query": workflow_result.get("sanitized_query", ""),
             "status": "success",
             "content": {}
         }

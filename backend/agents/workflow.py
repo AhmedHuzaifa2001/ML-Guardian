@@ -100,19 +100,24 @@ def general_chat_node(state: AgentState) -> dict:
             "final_response": {
                 "status": "success",
                 "intent": "GENERAL_CHAT",
-                "response": response.content
+                "response": response.content,
+                "sanitized_query": state.get("sanitized_query", state["user_query"])
             }
         }
 
 def generate_response_node(state: AgentState) -> dict:
     with logfire.span("Node: Generate Final Response"):
         intent = state.get("intent", "GENERAL_CHAT")
-        response = {"status": "success", "intent": intent, "query": state["user_query"]}
+        response = {
+            "status": "success", 
+            "intent": intent, 
+            "query": state["user_query"],
+            "sanitized_query": state.get("sanitized_query", state["user_query"])
+        }
         if state.get("ml_recommendation"): response["ml_recommendation"] = state["ml_recommendation"]
         if state.get("risk_audit"): response["risk_audit"] = state["risk_audit"]
         if state.get("explanation"): response["explanation"] = state["explanation"]
         return {"final_response": response}
-
 
 # ─────────────────────────────────────────────
 # 3. DEFINE CONDITIONAL ROUTING

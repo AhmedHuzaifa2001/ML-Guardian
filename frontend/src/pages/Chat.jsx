@@ -147,8 +147,10 @@ export default function Chat() {
       const aiMessage = { role: 'ai', type: 'response', data: response.data };
       setMessages((prev) => [...prev, aiMessage]);
       
+      const safeQuery = response.data.sanitized_query || text;
+      
       const newHistoryItem = {
-        user_query: text,
+        user_query: safeQuery,
         intent: response.data.query_intent || 'UNKNOWN',
         agent_response: response.data
       };

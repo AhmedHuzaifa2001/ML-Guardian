@@ -75,9 +75,14 @@ def send_chat_message(
     )
     
     # 3. Save the conversation to the PostgreSQL database
+    # CRITICAL: We save the SANITIZED query to prevent PII leakage in our own database!
+    safe_query = raw_workflow_result.get("sanitized_query", chat_request.message)
+    if not safe_query.strip():
+        safe_query = chat_request.message # Fallback if empty
+        
     new_chat_session = ChatSession(
         user_id=current_user.id,
-        user_query=chat_request.message,
+        user_query=safe_query,
         intent=formatted_passport.get("query_intent", "UNKNOWN"),
         agent_response=formatted_passport
     )
